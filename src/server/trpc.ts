@@ -27,7 +27,7 @@ const isAuthenticated = t.middleware(({ next, ctx }) => {
   return next({ ctx });
 });
 
-export const procedure = t.procedure;
+export const publicProcedure = t.procedure;
 export const protectedProcedure = t.procedure.use(isAuthenticated);
 export const router = t.router;
 export const mergeRouters = t.mergeRouters;
