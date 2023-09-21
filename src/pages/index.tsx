@@ -6,8 +6,8 @@ import { trpc } from "~/lib/trpc";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
-  const { data } = trpc.checkhealth.useQuery();
-
+  const { data } = trpc.entries.get.useQuery();
+  console.log(data);
   return (
     <>
       <Head>
@@ -16,7 +16,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={inter.className}>{data}</main>
+      <main className={inter.className}></main>
     </>
   );
 }
