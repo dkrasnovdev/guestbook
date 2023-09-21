@@ -8,6 +8,21 @@ import { db } from "~/server/db";
 
 export const authOptions: AuthOptions = {
   adapter: DrizzleAdapter(db),
+  callbacks: {
+    session: ({ session, token }) => {
+      if (session.user) {
+        session.user.id = token.sub;
+      }
+      return session;
+    },
+    jwt: ({ token, user, account }) => {
+      if (account) {
+        token.sub = user.id;
+        return token;
+      }
+      return token;
+    },
+  },
   providers: [
     GitHubProvider({
       clientId: env.GITHUB_CLIENT_ID,
