@@ -1,13 +1,9 @@
 import { Inter } from "next/font/google";
 import Head from "next/head";
 
-import { trpc } from "~/lib/trpc";
-
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
-  const { data } = trpc.entries.get.useQuery();
-  console.log(data);
   return (
     <>
       <Head>

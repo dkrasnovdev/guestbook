@@ -9,18 +9,11 @@ import { db } from "~/server/db";
 export const authOptions: AuthOptions = {
   adapter: DrizzleAdapter(db),
   callbacks: {
-    session: ({ session, token }) => {
+    session: ({ session, user }) => {
       if (session.user) {
-        session.user.id = token.sub;
+        session.user.id = user.id;
       }
       return session;
-    },
-    jwt: ({ token, user, account }) => {
-      if (account) {
-        token.sub = user.id;
-        return token;
-      }
-      return token;
     },
   },
   providers: [
