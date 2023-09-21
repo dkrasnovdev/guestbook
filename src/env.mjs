@@ -4,6 +4,8 @@ const server = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]),
   NEXTAUTH_URL: z.string().min(1),
   NEXTAUTH_SECRET: z.string().min(1),
+  GITHUB_CLIENT_ID: z.string().min(1),
+  GITHUB_CLIENT_SECRET: z.string().min(1),
   DATABASE_URL: z.string().min(1),
 });
 
@@ -24,6 +26,8 @@ const processEnv = {
   NEXT_PUBLIC_APP_PORT: process.env.NEXT_PUBLIC_APP_PORT,
   NEXTAUTH_URL: process.env.NEXTAUTH_URL,
   NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
+  GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
+  GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET,
   DATABASE_URL: process.env.DATABASE_URL,
 };
 
@@ -50,7 +54,7 @@ if (!!process.env.SKIP_ENV_VALIDATION == false) {
   if (parsed.success === false) {
     console.error(
       "❌ Invalid environment variables:",
-      parsed.error.flatten().fieldErrors
+      parsed.error.flatten().fieldErrors,
     );
     throw new Error("Invalid environment variables");
   }
@@ -64,7 +68,7 @@ if (!!process.env.SKIP_ENV_VALIDATION == false) {
         throw new Error(
           process.env.NODE_ENV === "production"
             ? "❌ Attempted to access a server-side environment variable on the client"
-            : `❌ Attempted to access server-side environment variable '${prop}' on the client`
+            : `❌ Attempted to access server-side environment variable '${prop}' on the client`,
         );
       return target[/** @type {keyof typeof target} */ (prop)];
     },

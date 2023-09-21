@@ -1,15 +1,19 @@
 import "~/styles/globals.css";
-import type { Session } from "next-auth";
+
 import type { NextComponentType } from "next";
 import type { AppType } from "next/app";
+import type { Session } from "next-auth";
 import { getSession, SessionProvider } from "next-auth/react";
-import { trpc } from "~/lib/trpc";
 
+import { trpc } from "~/lib/trpc";
 
 const App: AppType<{ session: Session | null }> = ({
   Component,
   pageProps,
-}: { Component: NextComponentType<any, any, any>, pageProps: { session: Session | null } }) => {
+}: {
+  Component: NextComponentType<any, any, any>;
+  pageProps: { session: Session | null };
+}) => {
   return (
     <SessionProvider session={pageProps.session}>
       <Component {...pageProps} />
