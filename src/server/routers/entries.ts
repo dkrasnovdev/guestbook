@@ -1,5 +1,5 @@
 import { TRPCError } from "@trpc/server";
-import { desc } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { entries } from "~/server/db/schema";
@@ -16,7 +16,6 @@ export const entriesRouter = router({
       }),
     )
     .mutation(async ({ input, ctx: { session, db } }) => {
-      console.log("session", session);
       if (!session?.user || !session?.user.id) {
         throw new TRPCError({
           code: "UNAUTHORIZED",
@@ -29,5 +28,41 @@ export const entriesRouter = router({
         content: input.content,
         createdAt: new Date(),
       });
+    }),
+  delete: protectedProcedure
+    .input(
+      z.object({
+        id: z.string().min(1),
+      }),
+    )
+    .mutation(async ({ input, ctx: { session, db } }) => {
+      if (!session?.user || !session?.user.id) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+        });
+      }
+
+      const entry = await db
+        .select()
+        .from(entries)
+        .where(eq(entries.id, input.id));
+
+      if (!entry[0]) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+        });
+      }
+
+      if (entry[0].userId !== session.user.id) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+        });
+      }
+
+      return await db
+        .delete(entries)
+        .where(
+          and(eq(entries.id, input.id), eq(entries.userId, session.user.id)),
+        );
     }),
 });
