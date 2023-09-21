@@ -4,13 +4,13 @@ import type { AppRouter } from "~/server/_app";
 import { httpBatchLink, loggerLink } from "@trpc/client";
 import { createTRPCNext } from "@trpc/next";
 import superjson from "superjson";
+import { env } from "~/env.mjs";
 
 function getBaseUrl() {
   if (typeof window !== "undefined") {
     return "";
   }
-  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
-  return `http://localhost:${process.env.PORT ?? 3000}`;
+  return `${env.NEXT_PUBLIC_APP_URL}:${env.NEXT_PUBLIC_APP_PORT}`;
 }
 
 export interface SSRContext extends NextPageContext {
