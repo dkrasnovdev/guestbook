@@ -5,6 +5,7 @@ import type { AppType } from "next/app";
 import { getSession, SessionProvider } from "next-auth/react";
 import { trpc } from "~/lib/trpc";
 
+
 const App: AppType<{ session: Session | null }> = ({
   Component,
   pageProps,
